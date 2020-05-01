@@ -17,6 +17,4 @@ jobs:
       - uses: actions/checkout@master
       - run: |
           python3 -m pip install -r .github/workflows/black-requirements.txt
-          python3 -m black -t "${BLACK_TARGET_VERSION}" --diff --check dyco
-        env:
-          BLACK_TARGET_VERSION: py38
+          python3 -m black --diff --check dyco

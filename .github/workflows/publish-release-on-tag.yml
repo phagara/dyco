@@ -10,10 +10,7 @@ jobs:
       - uses: actions/checkout@master
       - run: |
           python3 -m pip install -r .github/workflows/black-requirements.txt
-          python3 -m black -t "${BLACK_TARGET_VERSION}" -l "${BLACK_LINE_LENGTH}" --diff --check dyco
-        env:
-          BLACK_TARGET_VERSION: py38
-          BLACK_LINE_LENGTH: 120
+          python3 -m black --diff --check dyco
   hadolint:
     runs-on: ubuntu-latest
     steps:
