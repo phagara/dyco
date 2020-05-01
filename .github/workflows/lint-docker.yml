@@ -1,0 +1,18 @@
+name: lint-docker
+on:
+  push:
+    paths:
+      - 'Dockerfile'
+    branches:
+      - '**'
+    tags-ignore:
+      - 'v*'
+  pull_request:
+    paths:
+      - 'Dockerfile'
+jobs:
+  hadolint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - run: docker run --rm -i hadolint/hadolint:latest-alpine < Dockerfile
