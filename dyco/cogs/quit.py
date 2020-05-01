@@ -12,7 +12,7 @@ class Quit(commands.Cog):
 
     @commands.command()
     @commands.is_owner()
-    async def quit(self, ctx):
+    async def quit(self, ctx: "commands.Context"):
         """
         Shuts down the bot
 
