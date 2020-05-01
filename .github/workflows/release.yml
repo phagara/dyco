@@ -34,3 +34,5 @@ jobs:
 
           docker tag dyco $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
+          docker tag dyco $IMAGE_ID:latest
+          docker push $IMAGE_ID:latest
