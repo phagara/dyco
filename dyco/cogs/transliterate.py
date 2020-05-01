@@ -17,9 +17,7 @@ class Transliterate(commands.Cog):
             raise ValueError("unknown script code")
 
     @commands.command()
-    async def translit(
-        self, ctx: "commands.Context", target: str, text: str
-    ):
+    async def translit(self, ctx: "commands.Context", target: str, text: str):
         """
         Transliterates text to given script
         """
@@ -45,5 +43,7 @@ class Transliterate(commands.Cog):
             await self._validate_script_code(ctx, source)
         except ValueError:
             return
-        res = transliterate.translit(" ".join(text), language_code=source, reversed=True)
+        res = transliterate.translit(
+            " ".join(text), language_code=source, reversed=True
+        )
         await ctx.send(res)
