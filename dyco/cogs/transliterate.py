@@ -4,52 +4,57 @@ import transliterate
 from discord.ext import commands
 
 
+_AVAIL_SCRIPTS = {
+    pack.language_code: pack.language_name
+    for pack in transliterate.get_available_language_packs()
+}
+
+
+class _ScriptCode(str):
+    @staticmethod
+    def avail_as_str():
+        return ", ".join(
+            ["{} ({})".format(code, name) for code, name in _AVAIL_SCRIPTS.items()]
+        )
+
+    def __new__(cls, text):
+        if text in _AVAIL_SCRIPTS:
+            return super().__new__(text)
+        raise ValueError(
+            "Unknown target script code. Pick one of: {}".format(cls.avail_as_str())
+        )
+
+
 class Transliterate(commands.Cog):
-    AVAIL_SCRIPTS = {
-        pack.language_code: pack.language_name
-        for pack in transliterate.get_available_language_packs()
-    }
-
-    async def _validate_script_code(self, ctx: "commands.Context", code: str):
-        if code is not None and code not in self.AVAIL_SCRIPTS:
-            await ctx.send(
-                "Unknown target script code. Pick one of: {}".format(
-                    ", ".join(
-                        [
-                            "{} ({})".format(code, name)
-                            for code, name in self.AVAIL_SCRIPTS.items()
-                        ]
-                    )
-                )
-            )
-            raise ValueError("unknown script code")
-
     @commands.command()
-    async def translit(self, ctx: "commands.Context", target: str, text: str):
+    async def translit(
+        self, ctx: "commands.Context", target: _ScriptCode, *, text: str
+    ):
         """
         Transliterates text to given script
         """
-        try:
-            await self._validate_script_code(ctx, target)
-        except ValueError:
-            return
-        res = transliterate.translit(text, language_code=target)
-        await ctx.send(res)
+        await ctx.send(transliterate.translit(text, language_code=target))
 
     @commands.command()
     async def untranslit(
         self,
         ctx: "commands.Context",
-        source: typing.Optional[str] = None,
+        source: typing.Optional[_ScriptCode] = None,
         *,
         text: str,
     ):
         """
         Transliterates text back to latin script
         """
-        try:
-            await self._validate_script_code(ctx, source)
-        except ValueError:
-            return
-        res = transliterate.translit(text, language_code=source, reversed=True)
-        await ctx.send(res)
+        await ctx.send(
+            transliterate.translit(text, language_code=source, reversed=True)
+        )
+
+    @commands.command()
+    async def scriptlist(self, ctx: "commands.Context"):
+        """
+        List available language scripts
+        """
+        await ctx.send(
+            "Available language scripts: {}".format(_ScriptCode.avail_as_str())
+        )
