@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dyco-deployment
+  name: dyco
   labels:
     app: dyco-app
 spec:
