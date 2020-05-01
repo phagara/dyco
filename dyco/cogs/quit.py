@@ -13,5 +13,11 @@ class Quit(commands.Cog):
     @commands.command()
     @commands.is_owner()
     async def quit(self, ctx):
+        '''
+        Shuts down the bot
+
+        Requires an external mechanism to detect bot termination and restart
+        it, possibly applying updates before doing so.
+        '''
         await ctx.send('Shutting down...')
         await ctx.bot.logout()
