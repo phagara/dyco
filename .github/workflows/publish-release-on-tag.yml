@@ -14,8 +14,15 @@ jobs:
         env:
           BLACK_TARGET_VERSION: py38
           BLACK_LINE_LENGTH: 120
+  hadolint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - run: docker run --rm -i hadolint/hadolint:latest-alpine < Dockerfile
   release:
-    needs: black
+    needs:
+      - black
+      - hadolint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
