@@ -47,8 +47,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - name: install gnu parallel
-        run: sudo apt-get install parallel
       - name: build image
         run: |
           DYCO_VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
@@ -69,11 +67,11 @@ jobs:
           echo "VERSION=${VERSION}"
 
           docker tag dyco "${IMAGE_ID}:${VERSION}"
-          parallel --retries 5 --delay 15 docker ::: push "${IMAGE_ID}:${VERSION}"
+          for retry in $(seq 5); do docker push "${IMAGE_ID}:${VERSION}" && break || sleep 15; done
 
           # if this is the highest version git tag, push :latest
           # sleep (hopefully) reduces the chances of push failing with "blob upload unknown" error
           [ "$(git tag | sort -V | tail -n1)" == "${VERSION}" ] \
           && docker tag dyco "${IMAGE_ID}:latest" \
           && sleep 5 \
-          && parallel --retries 5 --delay 15 docker ::: push "${IMAGE_ID}:latest"
+          && for retry in $(seq 5); do docker push "${IMAGE_ID}:latest" && break || sleep 15; done
