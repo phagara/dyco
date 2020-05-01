@@ -1,6 +1,7 @@
 FROM python:3-alpine
 
 ARG DYCO_VERSION=unknown
+ENV DYCO_VERSION=$DYCO_VERSION
 
 COPY . /app
 WORKDIR /app
