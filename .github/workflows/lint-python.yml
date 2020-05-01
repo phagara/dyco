@@ -1,4 +1,4 @@
-name: lint-on-push
+name: lint-python
 on:
   push:
     paths:
