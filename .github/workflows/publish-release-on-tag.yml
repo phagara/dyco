@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - run: |
-          python3 -m pip install -r .github/workflows/lint-requirements.txt
+          python3 -m pip install -r .github/workflows/black-requirements.txt
           python3 -m black -t "${BLACK_TARGET_VERSION}" -l "${BLACK_LINE_LENGTH}" --diff --check dyco
         env:
           BLACK_TARGET_VERSION: py38
