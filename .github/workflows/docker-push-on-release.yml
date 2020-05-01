@@ -1,8 +1,11 @@
 name: docker-push-on-release
 
 on:
+  push:
+    tags:
+      - 'v*'
   release:
-    types: [ published ]
+    types: [ created ]
 
 jobs:
   deploy:
