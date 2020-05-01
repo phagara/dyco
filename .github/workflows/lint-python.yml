@@ -11,6 +11,13 @@ on:
     paths:
       - 'dyco/**.py'
 jobs:
+  pylint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - runs: |
+          python3 -m pip install -r .github/workflows/pylint-requirements.txt
+          python3 -m pylint -E dyco
   black:
     runs-on: ubuntu-latest
     steps:
