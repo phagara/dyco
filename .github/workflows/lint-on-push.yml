@@ -6,7 +6,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - run: black -t "${BLACK_TARGET_VERSION}" -l "${BLACK_LINE_LENGTH}" --diff --check dyco
+      - run: |
+          pip install --user -r .github/workflows/lint-requirements.txt
+          black -t "${BLACK_TARGET_VERSION}" -l "${BLACK_LINE_LENGTH}" --diff --check dyco
         env:
           BLACK_TARGET_VERSION: py38
           BLACK_LINE_LENGTH: 120
