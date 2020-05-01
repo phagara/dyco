@@ -1,3 +1,5 @@
+![lint-python](https://github.com/phagara/dyco/workflows/lint-python/badge.svg)
+![lint-docker](https://github.com/phagara/dyco/workflows/lint-docker/badge.svg)
 ![publish-release-on-tag](https://github.com/phagara/dyco/workflows/publish-release-on-tag/badge.svg)
 
 # dyco
