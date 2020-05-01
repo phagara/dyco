@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - runs: |
+      - run: |
           python3 -m pip install -r .github/workflows/pylint-requirements.txt
           python3 -m pylint -E dyco
   black:
