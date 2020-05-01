@@ -6,21 +6,13 @@ from discord.ext import commands
 
 
 class LinkUntrack(commands.Cog):
-    FORBIDDEN_QUERY_STRINGS = [
-        'fbclid',
-        'gclid',
-        'utm_source',
-        'utm_medium',
-        'utm_campaign',
-        'utm_term',
-        'utm_content',
-    ]
+    FORBIDDEN_QUERY_STRINGS = ["fbclid", "gclid", "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"]
 
-    def __init__(self, bot: 'commands.Bot'):
+    def __init__(self, bot: "commands.Bot"):
         self.bot = bot
 
     @commands.Cog.listener()
-    async def on_message(self, message: 'discord.Message'):
+    async def on_message(self, message: "discord.Message"):
         if message.author == self.bot.user:
             return
 
@@ -45,8 +37,6 @@ class LinkUntrack(commands.Cog):
         if corrected_urls:
             async with message.channel.typing():
                 await message.channel.send(
-                    'Links with tracking crap removed:\n\t- {}'.format(
-                        '\n\t- '.join(corrected_urls)
-                    )
+                    "Links with tracking crap removed:\n\t- {}".format("\n\t- ".join(corrected_urls))
                 )
-            await message.add_reaction('\N{pile of poo}')
+            await message.add_reaction("\N{pile of poo}")
