@@ -48,7 +48,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: install gnu parallel
-        run: apt-get install parallel
+        run: sudo apt-get install parallel
       - name: build image
         run: |
           DYCO_VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
