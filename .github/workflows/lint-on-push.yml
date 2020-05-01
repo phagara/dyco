@@ -1,0 +1,12 @@
+name: lint-on-push
+on:
+  - push
+jobs:
+  black:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - run: black -t "${BLACK_TARGET_VERSION}" -l "${BLACK_LINE_LENGTH}" --diff --check dyco
+        env:
+          BLACK_TARGET_VERSION: py38
+          BLACK_LINE_LENGTH: 120
