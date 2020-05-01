@@ -25,7 +25,7 @@ class Transliterate(commands.Cog):
             await self._validate_script_code(ctx, target)
         except ValueError:
             return
-        res = transliterate.translit(" ".join(text), language_code=target)
+        res = transliterate.translit(text, language_code=target)
         await ctx.send(res)
 
     @commands.command()
@@ -43,7 +43,5 @@ class Transliterate(commands.Cog):
             await self._validate_script_code(ctx, source)
         except ValueError:
             return
-        res = transliterate.translit(
-            " ".join(text), language_code=source, reversed=True
-        )
+        res = transliterate.translit(text, language_code=source, reversed=True)
         await ctx.send(res)
