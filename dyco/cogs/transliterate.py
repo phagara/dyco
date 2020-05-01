@@ -18,7 +18,7 @@ class Transliterate(commands.Cog):
 
     @commands.command()
     async def translit(
-        self, ctx: "commands.Context", target: str, text: commands.Greedy(str)
+        self, ctx: "commands.Context", target: str, text: commands.Greedy[str]
     ):
         """
         Transliterates text to given script
@@ -36,7 +36,7 @@ class Transliterate(commands.Cog):
         ctx: "commands.Context",
         source: typing.Optional[str] = None,
         *,
-        text: commands.Greedy(str),
+        text: commands.Greedy[str],
     ):
         """
         Transliterates text back to latin script
