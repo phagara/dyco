@@ -5,13 +5,21 @@ from discord.ext import commands
 
 
 class Transliterate(commands.Cog):
-    AVAIL_SCRIPTS = transliterate.get_available_language_codes()
+    AVAIL_SCRIPTS = {
+        pack.language_code: pack.language_name
+        for pack in transliterate.get_available_language_packs()
+    }
 
     async def _validate_script_code(self, ctx: "commands.Context", code: str):
         if code is not None and code not in self.AVAIL_SCRIPTS:
             await ctx.send(
                 "Unknown target script code. Pick one of: {}".format(
-                    ", ".join(self.AVAIL_SCRIPTS)
+                    ", ".join(
+                        [
+                            "{} ({})".format(code, name)
+                            for code, name in self.AVAIL_SCRIPTS.items()
+                        ]
+                    )
                 )
             )
             raise ValueError("unknown script code")
