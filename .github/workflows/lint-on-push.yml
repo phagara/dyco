@@ -1,6 +1,10 @@
 name: lint-on-push
 on:
   push:
+    paths:
+      - 'dyco/**.py'
+    branches:
+      - '**'
     tags-ignore:
       - 'v*'
   pull_request:
