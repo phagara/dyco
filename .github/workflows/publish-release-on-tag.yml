@@ -58,4 +58,5 @@ jobs:
           docker push "${IMAGE_ID}:${VERSION}"
 
           # if this is the highest version git tag, push :latest
-          [ "${VERSION}" != "latest" ] && [ "$(git tag | sort -V | tail -n1)" == "${VERSION}" ] && docker push "${IMAGE_ID}:latest"
+          # sleep (hopefully) reduces the chances of push failing with "blob upload unknown" error
+          [ "${VERSION}" != "latest" ] && [ "$(git tag | sort -V | tail -n1)" == "${VERSION}" ] && sleep 5 && docker push "${IMAGE_ID}:latest"
