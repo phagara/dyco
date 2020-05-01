@@ -16,7 +16,7 @@ def main():
     if conf is None:
         conf = {}
 
-    version = os.environ.get('DYCO_VERSION')
+    version = os.environ.get("DYCO_VERSION")
     if "DYCO_TOKEN" in os.environ:
         conf["token"] = os.environ["DYCO_TOKEN"]
 
