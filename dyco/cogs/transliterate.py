@@ -19,8 +19,8 @@ class _ScriptCode(str):
 
     def __new__(cls, text):
         if text in _AVAIL_SCRIPTS:
-            return super().__new__(text)
-        raise ValueError(
+            return str(text)
+        raise TypeError(
             "Unknown target script code. Pick one of: {}".format(cls.avail_as_str())
         )
 
