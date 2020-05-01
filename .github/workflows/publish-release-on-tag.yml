@@ -4,6 +4,16 @@ on:
     tags:
       - 'v*'
 jobs:
+  black:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - run: |
+          python3 -m pip install -r .github/workflows/lint-requirements.txt
+          python3 -m black -t "${BLACK_TARGET_VERSION}" -l "${BLACK_LINE_LENGTH}" --diff --check dyco
+        env:
+          BLACK_TARGET_VERSION: py38
+          BLACK_LINE_LENGTH: 120
   release:
     needs: black
     runs-on: ubuntu-latest
@@ -17,3 +27,33 @@ jobs:
           release_name: ${{ github.ref }}
           draft: false
           prerelease: false
+  deploy:
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: build image
+        run: docker build . --file Dockerfile --tag dyco
+      - name: registry login
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+      - name: push image
+        run: |
+          IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/dyco
+
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo ${IMAGE_ID} | tr '[A-Z]' '[a-z]')
+
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+          # Use Docker `latest` tag convention
+          [ "${VERSION}" == "master" ] && VERSION=latest
+
+          echo "IMAGE_ID=${IMAGE_ID}"
+          echo "VERSION=${VERSION}"
+
+          docker tag dyco "${IMAGE_ID}:${VERSION}"
+          docker push "${IMAGE_ID}:${VERSION}"
+
+          # if this is the highest version git tag, push :latest
+          [ "${VERSION}" != "latest" ] && [ "$(git tag | sort -V | tail -n1)" == "${VERSION}" ] && docker push "${IMAGE_ID}:latest"
