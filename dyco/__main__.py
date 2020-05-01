@@ -31,7 +31,7 @@ def main():
     elif args.token is None:
         raise Exception("Bot auth token not set! Create ~/.dycorc, set DYCO_TOKEN or use --token option.")
     else:
-        bot = commands.Bot(command_prefix="!", description="Dyco the Discord bot (version {}).".format(version))
+        bot = commands.Bot(command_prefix="!", description="Dyco the Discord bot (build: {}).".format(version))
         for cog in ALL_COGS:
             bot.add_cog(cog(bot))
         bot.run(args.token)
