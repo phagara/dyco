@@ -1,7 +1,11 @@
 name: lint-on-push
 on:
-  - push
-  - pull_request
+  push:
+    tags-ignore:
+      - 'v*'
+  pull_request:
+    paths:
+      - 'dyco/**.py'
 jobs:
   black:
     runs-on: ubuntu-latest
