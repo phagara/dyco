@@ -1,3 +1,5 @@
+![publish-release-on-tag](https://github.com/phagara/dyco/workflows/publish-release-on-tag/badge.svg)
+
 # dyco
 
 a silly discord bot
