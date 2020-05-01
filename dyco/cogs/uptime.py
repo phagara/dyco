@@ -15,9 +15,9 @@ class Uptime(commands.Cog):
 
     @commands.command()
     async def uptime(self, ctx):
-        '''
+        """
         Shows how long the bot has been running for
-        '''
+        """
         uptime = datetime.datetime.now() - self.started_at
         human_uptime = humanize.naturaldelta(-uptime)
         await ctx.send('Up {}.'.format(human_uptime))
