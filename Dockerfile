@@ -1,5 +1,7 @@
 FROM python:3-alpine
 
+ARG DYCO_VERSION=unknown
+
 COPY . /app
 WORKDIR /app
 

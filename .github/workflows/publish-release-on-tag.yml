@@ -33,7 +33,9 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: build image
-        run: docker build . --file Dockerfile --tag dyco
+        run: |
+          DYCO_VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          docker build . --file Dockerfile --tag dyco --build-arg DYCO_VERSION
       - name: registry login
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
       - name: push image
