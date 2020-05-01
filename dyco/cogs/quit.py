@@ -8,7 +8,7 @@ class Quit(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         info = await self.bot.application_info()
-        info.owner.send('Dyco (re)started!')
+        await info.owner.send('Dyco (re)started!')
 
     @commands.command()
     @commands.is_owner()
