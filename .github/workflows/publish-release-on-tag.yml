@@ -60,11 +60,8 @@ jobs:
           # Change all uppercase to lowercase
           IMAGE_ID=$(echo ${IMAGE_ID} | tr '[A-Z]' '[a-z]')
 
-          # Strip git ref prefix from version
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-
-          # Use Docker `latest` tag convention
-          [ "${VERSION}" == "master" ] && VERSION=latest
+          # Strip git tag ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,^refs/tags/,,')
 
           echo "IMAGE_ID=${IMAGE_ID}"
           echo "VERSION=${VERSION}"
@@ -74,8 +71,7 @@ jobs:
 
           # if this is the highest version git tag, push :latest
           # sleep (hopefully) reduces the chances of push failing with "blob upload unknown" error
-          [ "${VERSION}" != "latest" ] \
-          && [ "$(git tag | sort -V | tail -n1)" == "${VERSION}" ] \
+          [ "$(git tag | sort -V | tail -n1)" == "${VERSION}" ] \
           && docker tag dyco "${IMAGE_ID}:latest" \
           && sleep 5 \
           && docker push "${IMAGE_ID}:latest"
