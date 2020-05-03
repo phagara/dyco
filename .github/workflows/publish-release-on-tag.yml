@@ -18,7 +18,7 @@ jobs:
           # need to install setuptools first, as wrapt's (pylint sub-dep) install scripts depends on it
           python3 -m pip install -r .github/workflows/setuptools-requirements.txt
           python3 -m pip install -r .github/workflows/pylint-requirements.txt
-          python3 -m pip install --no-binary :all: --require-hashes -r requirements.txt
+          python3 -m pip install --require-hashes -r requirements.txt
           python3 -m pylint -E dyco
   black:
     runs-on: ubuntu-latest
