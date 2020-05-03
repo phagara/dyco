@@ -1,4 +1,5 @@
 import os
+import logging
 import argparse
 import yaml
 from discord.ext import commands
@@ -7,6 +8,8 @@ from dyco.cogs import ALL_COGS
 
 
 def main():
+    logging.basicConfig(level=logging.INFO)
+
     try:
         with open(os.path.expanduser("~/.dycorc")) as conff:
             conf = yaml.safe_load(conff.read())
