@@ -50,7 +50,7 @@ jobs:
       - name: docker enable experimental
         run: |
           jq '.experimental = "enabled"' ~/.docker/config.json > ~/.docker/config.json.new
-          mv ~/.docker.config.json.new ~/.docker/config.json
+          mv ~/.docker/config.json.new ~/.docker/config.json
       - name: docker buildx install
         run: |
           docker buildx ls
