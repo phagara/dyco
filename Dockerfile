@@ -3,7 +3,7 @@ FROM python:3-alpine
 ARG DYCO_VERSION
 ENV DYCO_VERSION=${DYCO_VERSION:-unknown}
 
-COPY . /app
+COPY dyco requirements.txt LICENSE /app/
 WORKDIR /app
 
 RUN \
