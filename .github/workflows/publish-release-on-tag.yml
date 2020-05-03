@@ -49,6 +49,7 @@ jobs:
       - uses: actions/checkout@master
       - name: docker enable experimental
         run: |
+          mkdir -p ~/.docker
           [ -f ~/.docker/config.json ] || echo '{}' > ~/.docker/config.json
           jq '.experimental = "enabled"' ~/.docker/config.json > /tmp/config.json
           mv /tmp/config.json ~/.docker/config.json
