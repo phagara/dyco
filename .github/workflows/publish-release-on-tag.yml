@@ -65,7 +65,7 @@ jobs:
           fetch-depth: 1
       - name: docker client upgrade
         run: |
-          repo="https://download.docker.com/linux/ubunut"
+          repo="https://download.docker.com/linux/ubuntu"
           curl -fsSL "${repo}/gpg" | sudo apt-key add -
           os="$(lsb_release -cs)"
           sudo add-apt-repository "deb [arch=amd64] ${repo} ${os} stable"
