@@ -97,4 +97,4 @@ jobs:
           echo "IMAGE_ID=${IMAGE_ID}"
           echo "VERSION=${VERSION}"
           echo "TAGS=${TAGS[@]}"
-          docker build --push --platform "${DOCKER_PLATFORMS// /,}" "${TAGS[@]}" --build-arg DYCO_VERSION="${VERSION}" .
+          docker build --push --platform "${DOCKER_PLATFORMS// /,}" "${TAG_ARGS[@]}" --build-arg DYCO_VERSION="${VERSION}" .
