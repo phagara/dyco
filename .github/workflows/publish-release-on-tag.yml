@@ -96,4 +96,4 @@ jobs:
             TAG_ARGS+=(--tag "${{ secrets.DOCKERHUB_LOGIN }}/${tag}")
           done
 
-          docker build --push --platform "${DOCKER_PLATFORMS// /,}" "${TAG_ARGS[@]}" --build-arg DYCO_VERSION="${VERSION}" .
+          docker build --squash --push --platform "${DOCKER_PLATFORMS// /,}" "${TAG_ARGS[@]}" --build-arg DYCO_VERSION="${VERSION}" .
