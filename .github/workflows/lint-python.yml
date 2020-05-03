@@ -38,5 +38,5 @@ jobs:
           python-version: 3.8
       - run: |
           python3 -m pip install --upgrade pip
-          python3 -m pip install --require-hashes -r .github/workflows/black-requirements.txt
+          python3 -m pip install -r .github/workflows/black-requirements.txt
           python3 -m black --diff --check dyco
