@@ -81,20 +81,17 @@ jobs:
           docker buildx inspect --bootstrap
           docker buildx install
       - name: registry login
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u ${{ secrets.DOCKERHUB_LOGIN }} --password-stdin
       - name: build and push image
         run: |
-          IMAGE_ID=$(echo "docker.pkg.github.com/${{ github.repository }}/dyco" | tr '[A-Z]' '[a-z]')
           VERSION=$(echo "${{ github.ref }}" | sed -e 's,^refs/tags/,,')
 
-          TAGS=("${IMAGE_ID}:${VERSION}")
-          [ "$(git tag | sort -V | tail -n1)" == "${VERSION}" ] && TAGS+=("${IMAGE_ID}:latest")
+          TAGS=("dyco:${VERSION}")
+          [ "$(git tag | sort -V | tail -n1)" == "${VERSION}" ] && TAGS+=("dyco:latest")
 
           # build cli option array for tags
           declare -a TAG_ARGS=()
           for tag in "${TAGS[@]}"; do TAG_ARGS+=(--tag "${tag}"); done
 
-          echo "IMAGE_ID=${IMAGE_ID}"
-          echo "VERSION=${VERSION}"
           echo "TAGS=${TAGS[@]}"
           docker build --push --platform "${DOCKER_PLATFORMS// /,}" "${TAG_ARGS[@]}" --build-arg DYCO_VERSION="${VERSION}" .
