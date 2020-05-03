@@ -11,6 +11,13 @@ ENV DYCO_GID=${DYCO_GID:-1000}
 LABEL version=${DYCO_VERSION}
 LABEL description="a silly discord bot"
 
+# Even though /app will be removed from the final image,
+# it will still be present in the layers, wasting space.
+# Staged builds won't help here, as "COPY --from" has the
+# same issue. We don't want to pull the dyco package from
+# a pypi, as that will break local dev builds. Squashing
+# the image at build time would help, but that feature is
+# still experimental. That's containers in TYOOL 2020.
 COPY dyco /app/dyco/
 COPY LICENSE MANIFEST.in requirements.txt setup.py /app/
 WORKDIR /app
