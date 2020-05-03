@@ -49,7 +49,7 @@ jobs:
       - uses: actions/checkout@master
       - name: docker enable experimental
         run: |
-          cat ~/.docker/config.json
+          [ -f ~/.docker/config.json ] || echo '{}' > ~/.docker/config.json
           jq '.experimental = "enabled"' ~/.docker/config.json > /tmp/config.json
           mv /tmp/config.json ~/.docker/config.json
       - name: docker buildx install
