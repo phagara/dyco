@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: dyco-app
-          image: docker.pkg.github.com/phagara/dyco/dyco
+          image: dycobot/dyco
           envFrom:
             - secretRef:
                 name: dyco-secrets
