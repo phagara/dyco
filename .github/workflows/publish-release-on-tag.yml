@@ -49,10 +49,12 @@ jobs:
       - uses: actions/checkout@master
       - name: docker enable experimental
         run: |
+          echo -e "19.03\n$(docker version -f '{{.Server.Version}}')" | sort -cV
           mkdir -p ~/.docker
           [ -f ~/.docker/config.json ] || echo '{}' > ~/.docker/config.json
           jq '.experimental = "enabled"' ~/.docker/config.json > /tmp/config.json
           mv /tmp/config.json ~/.docker/config.json
+          [[ "$(docker version -f '{{.Server.Experimental}}')" == "true" ]]
       - name: docker buildx install
         run: |
           docker buildx ls
