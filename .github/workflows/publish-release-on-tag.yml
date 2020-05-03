@@ -47,10 +47,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+      - name: docker enable experimental
+        run: |
+          jq '.experimental = "enabled"' ~/.docker/config.json > ~/.docker/config.json.new
+          mv ~/.docker.config.json.new ~/.docker/config.json
+      - name: docker buildx install
+        run: |
+          docker buildx ls
+          docker buildx create --use --name mybuilder
+          docker buildx inspect --bootstrap
+          docker buildx install
       - name: build image
         run: |
           DYCO_VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-          docker build . --file Dockerfile --tag dyco --build-arg DYCO_VERSION="${DYCO_VERSION}"
+          docker build --platform linux/amd64,linux/arm64,linux/arm/v7 --tag dyco --build-arg DYCO_VERSION="${DYCO_VERSION}" .
       - name: registry login
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
       - name: push image
