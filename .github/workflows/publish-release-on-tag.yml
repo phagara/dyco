@@ -86,10 +86,15 @@ jobs:
         run: |
           IMAGE_ID=$(echo "docker.pkg.github.com/${{ github.repository }}/dyco" | tr '[A-Z]' '[a-z]')
           VERSION=$(echo "${{ github.ref }}" | sed -e 's,^refs/tags/,,')
+
           TAGS=("${IMAGE_ID}:${VERSION}")
           [ "$(git tag | sort -V | tail -n1)" == "${VERSION}" ] && TAGS+=("${IMAGE_ID}:latest")
+
+          # build cli option array for tags
+          declare -a TAG_ARGS=()
+          for tag in "${TAGS[@]}"; do TAG_ARGS+=(--tag "${tag}"); done
 
           echo "IMAGE_ID=${IMAGE_ID}"
           echo "VERSION=${VERSION}"
           echo "TAGS=${TAGS[@]}"
-          docker build --push --platform "${DOCKER_PLATFORMS// /,}" "${TAGS[@]/#/--tag }" --build-arg DYCO_VERSION="${VERSION}" .
+          docker build --push --platform "${DOCKER_PLATFORMS// /,}" "${TAGS[@]}" --build-arg DYCO_VERSION="${VERSION}" .
