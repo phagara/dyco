@@ -4,11 +4,14 @@ from discord.ext import commands
 class Quit(commands.Cog):
     def __init__(self, bot: "commands.Bot"):
         self.bot = bot
+        self.started = False
 
     @commands.Cog.listener()
     async def on_ready(self):
-        info = await self.bot.application_info()
-        await info.owner.send("Dyco (re)started!")
+        if not self.started:
+            self.started = True
+            info = await self.bot.application_info()
+            await info.owner.send("Dyco started!")
 
     @commands.command()
     @commands.is_owner()
