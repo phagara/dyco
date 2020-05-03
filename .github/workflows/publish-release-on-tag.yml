@@ -8,6 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+        with:
+          fetch-depth: 1
       - run: |
           # need to install setuptools first, as wrapt's (pylint sub-dep) install scripts depends on it
           python3 -m pip install -r .github/workflows/setuptools-requirements.txt
@@ -18,6 +20,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+        with:
+          fetch-depth: 1
       - run: |
           python3 -m pip install -r .github/workflows/black-requirements.txt
           python3 -m black --diff --check dyco
@@ -25,6 +29,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+        with:
+          fetch-depth: 1
       - run: docker run --rm -i hadolint/hadolint:latest-alpine < Dockerfile
   release:
     needs:
@@ -34,6 +40,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+        with:
+          fetch-depth: 1
       - uses: actions/create-release@latest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -45,16 +53,27 @@ jobs:
   deploy:
     needs: release
     runs-on: ubuntu-latest
+    env:
+      DOCKER_CLI_EXPERIMENTAL: enabled
+      DOCKER_PLATFORMS: >
+        linux/amd64
+        linux/arm/v7
+        linux/arm64/v8
     steps:
       - uses: actions/checkout@master
-      - name: docker enable experimental
+        with:
+          fetch-depth: 1
+      - name: docker client upgrade
         run: |
-          echo -e "19.03\n$(docker version -f '{{.Client.Version}}')" | sort -cV
-          mkdir -p ~/.docker
-          [ -f ~/.docker/config.json ] || echo '{}' > ~/.docker/config.json
-          jq '.experimental = "enabled"' ~/.docker/config.json > /tmp/config.json
-          mv /tmp/config.json ~/.docker/config.json
-          [[ "$(docker version -f '{{.Client.Experimental}}')" == "true" ]]
+          repo="https://download.docker.com/linux/ubunut"
+          curl -fsSL "${repo}/gpg" | sudo apt-key add -
+          os="$(lsb_release -cs)"
+          sudo add-apt-repository "deb [arch=amd64] ${repo} ${os} stable"
+          sudo apt-get update
+          sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
+      - name: docker qemu install
+        run: |
+          docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
       - name: docker buildx install
         run: |
           docker buildx ls
@@ -64,7 +83,8 @@ jobs:
       - name: build image
         run: |
           DYCO_VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-          docker build --platform linux/amd64,linux/arm64,linux/arm/v7 --tag dyco --build-arg DYCO_VERSION="${DYCO_VERSION}" .
+          docker build --platform "${DOCKER_PLATFORMS// /,}" --tag dyco --build-arg DYCO_VERSION="${DYCO_VERSION}" .
+          docker images dyco
       - name: registry login
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
       - name: push image
