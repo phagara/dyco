@@ -19,6 +19,9 @@ class LinkUntrack(commands.Cog):
     def __init__(self, bot: "commands.Bot"):
         self.bot = bot
 
+        # create/update TLD cache
+        urlextract.URLExtract().update()
+
     @commands.Cog.listener()
     async def on_message(self, message: "discord.Message"):
         if message.author == self.bot.user:
