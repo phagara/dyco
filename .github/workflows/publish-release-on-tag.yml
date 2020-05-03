@@ -10,23 +10,21 @@ jobs:
       - uses: actions/checkout@master
         with:
           fetch-depth: 1
-      - uses: docker://python:3-alpine
-        run: |
+      - run: |
           # need to install setuptools first, as wrapt's (pylint sub-dep) install scripts depends on it
-          pip install -r .github/workflows/setuptools-requirements.txt
-          pip install -r .github/workflows/pylint-requirements.txt
-          pip install --no-binary :all: --require-hashes -r requirements.txt
-          pylint -E dyco
+          python3 -m pip install -r .github/workflows/setuptools-requirements.txt
+          python3 -m pip install -r .github/workflows/pylint-requirements.txt
+          python3 -m pip install --no-binary :all: --require-hashes -r requirements.txt
+          python3 -m pylint -E dyco
   black:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
         with:
           fetch-depth: 1
-      - uses: docker://python:3-alpine
-        run: |
-          pip install -r .github/workflows/black-requirements.txt
-          black --diff --check dyco
+      - run: |
+          python3 -m pip install -r .github/workflows/black-requirements.txt
+          python3 -m black --diff --check dyco
   hadolint:
     runs-on: ubuntu-latest
     steps:
