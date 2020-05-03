@@ -18,7 +18,7 @@ RUN \
     apk add --no-cache --virtual .build-deps 'gcc=9.2.0-r4' 'musl-dev=1.1.24-r2' &&\
     pip install --no-cache --require-hashes -r /app/requirements.txt &&\
     apk del --no-network .build-deps &&\
-    pip install --no-cache --no-index /app/ &&\
+    pip install --no-cache --no-index --no-deps /app/ &&\
     rm -rf /app &&\
     addgroup -g 1000 dyco &&\
     adduser -D -u 1000 -G dyco dyco
