@@ -27,9 +27,7 @@ class _ScriptCode(str):
 
 class Transliterate(commands.Cog):
     @commands.command()
-    async def translit(
-        self, ctx: commands.Context, target: _ScriptCode, *, text: str
-    ):
+    async def translit(self, ctx: commands.Context, target: _ScriptCode, *, text: str):
         """
         Transliterates text to given script
         """
