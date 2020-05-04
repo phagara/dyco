@@ -1,5 +1,6 @@
 from .cog_manager import CogManager
 from .error_notify import ErrorNotify
+from .latency import Latency
 from .link_untrack import LinkUntrack
 from .mass_typing import MassTyping
 from .quit import Quit
@@ -12,6 +13,7 @@ from .version import Version
 ALL_COGS = [
     CogManager,
     ErrorNotify,
+    Latency,
     LinkUntrack,
     MassTyping,
     Quit,
