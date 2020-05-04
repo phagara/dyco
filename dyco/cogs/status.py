@@ -36,14 +36,20 @@ class Status(commands.Cog):
         """
         Sets activity to "Listening to <what>"
         """
-        await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=what))
+        await self.bot.change_presence(
+            activity=discord.Activity(type=discord.ActivityType.listening, name=what)
+        )
 
     @status.command()
     async def streaming(self, ctx: commands.Context, *, what: str):
         """
         Sets activity to "Streaming <what>"
         """
-        await self.bot.change_presence(activity=discord.Streaming(name=what, url="https://www.youtube.com/watch?v=dQw4w9WgXcQ"))
+        await self.bot.change_presence(
+            activity=discord.Streaming(
+                name=what, url="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+            )
+        )
 
     @status.command()
     async def unset(self, ctx: commands.Context):
