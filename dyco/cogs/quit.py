@@ -2,6 +2,10 @@ from discord.ext import commands
 
 
 class Quit(commands.Cog):
+    """
+    Gives bot owner the ability to gracefully terminate the bot.
+    """
+
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.started = False

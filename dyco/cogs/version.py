@@ -2,6 +2,10 @@ from discord.ext import commands
 
 
 class Version(commands.Cog):
+    """
+    Sends the bot's description/version string on demand.
+    """
+
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 

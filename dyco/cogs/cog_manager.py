@@ -20,7 +20,7 @@ class CogManager(commands.Cog):
     @commands.is_owner()
     async def cog(self, ctx: commands.Context):
         """
-        Lists/enables/disables cogs.
+        Lists/enables/disables cogs
         """
         if ctx.invoked_subcommand is None:
             await self.list(ctx)
@@ -28,10 +28,10 @@ class CogManager(commands.Cog):
     @cog.command()
     async def list(self, ctx: commands.Context):
         """
-        Lists all installed cogs.
+        Lists all installed cogs
         """
         await ctx.send(
-            "Enabled cogs:\n\t{}\nDisabled cogs:\n\t{}".format(
+            "```Enabled cogs:\n\t{}\nDisabled cogs:\n\t{}```".format(
                 "\n\t".join(
                     [
                         "{}\t{}".format(name, cog.description)
@@ -50,7 +50,7 @@ class CogManager(commands.Cog):
     @cog.command()
     async def enable(self, ctx: commands.Context, cog_name: str):
         """
-        Enables a cog.
+        Enables a cog
         """
         if cog_name in self.loaded_cogs:
             await ctx.send("Cog already enabled.")
@@ -72,7 +72,7 @@ class CogManager(commands.Cog):
     @cog.command()
     async def disable(self, ctx: commands.Context, cog_name: str):
         """
-        Disables a cog.
+        Disables a cog
         """
         if cog_name in self.unloaded_cogs:
             await ctx.send("Cog already disabled.")

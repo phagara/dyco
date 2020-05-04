@@ -4,6 +4,10 @@ from discord.ext import commands
 
 
 class ErrorNotify(commands.Cog):
+    """
+    Sends event error logs to bot owner in a DM.
+    """
+
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 

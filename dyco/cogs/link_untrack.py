@@ -6,6 +6,10 @@ from discord.ext import commands
 
 
 class LinkUntrack(commands.Cog):
+    """
+    Reposts URLs with tracking query strings removed.
+    """
+
     FORBIDDEN_QUERY_STRINGS = [
         "fbclid",
         "gclid",

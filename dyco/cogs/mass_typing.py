@@ -6,6 +6,10 @@ from discord.ext import commands
 
 
 class MassTyping(commands.Cog):
+    """
+    Joins in on the stampede.
+    """
+
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.typing = {}

@@ -5,6 +5,10 @@ from discord.ext import commands
 
 
 class Uptime(commands.Cog):
+    """
+    Tracks the bot's uptime.
+    """
+
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.started_at = None
