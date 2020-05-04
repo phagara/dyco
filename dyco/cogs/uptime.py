@@ -5,7 +5,7 @@ from discord.ext import commands
 
 
 class Uptime(commands.Cog):
-    def __init__(self, bot: "commands.Bot"):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.started_at = None
 
@@ -14,7 +14,7 @@ class Uptime(commands.Cog):
         self.started_at = datetime.datetime.now()
 
     @commands.command()
-    async def uptime(self, ctx):
+    async def uptime(self, ctx: commands.Context):
         """
         Shows how long the bot has been running for
         """

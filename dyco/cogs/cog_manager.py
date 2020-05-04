@@ -8,7 +8,7 @@ class CogManager(commands.Cog):
     Cog (bot plugin) management.
     """
 
-    def __init__(self, bot: "commands.Bot"):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.unloaded_cogs = {}
 
@@ -18,7 +18,7 @@ class CogManager(commands.Cog):
 
     @commands.group()
     @commands.is_owner()
-    async def cog(self, ctx: "commands.Context"):
+    async def cog(self, ctx: commands.Context):
         """
         Lists/enables/disables cogs.
         """
@@ -26,7 +26,7 @@ class CogManager(commands.Cog):
             await self.list(ctx)
 
     @cog.command()
-    async def list(self, ctx: "commands.Context"):
+    async def list(self, ctx: commands.Context):
         """
         Lists all installed cogs.
         """
@@ -48,7 +48,7 @@ class CogManager(commands.Cog):
         )
 
     @cog.command()
-    async def enable(self, ctx: "commands.Context", cog_name: str):
+    async def enable(self, ctx: commands.Context, cog_name: str):
         """
         Enables a cog.
         """
@@ -70,7 +70,7 @@ class CogManager(commands.Cog):
         await ctx.send("Cog enabled.")
 
     @cog.command()
-    async def disable(self, ctx: "commands.Context", cog_name: str):
+    async def disable(self, ctx: commands.Context, cog_name: str):
         """
         Disables a cog.
         """

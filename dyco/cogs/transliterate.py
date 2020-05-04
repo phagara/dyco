@@ -28,7 +28,7 @@ class _ScriptCode(str):
 class Transliterate(commands.Cog):
     @commands.command()
     async def translit(
-        self, ctx: "commands.Context", target: _ScriptCode, *, text: str
+        self, ctx: commands.Context, target: _ScriptCode, *, text: str
     ):
         """
         Transliterates text to given script
@@ -38,7 +38,7 @@ class Transliterate(commands.Cog):
     @commands.command()
     async def untranslit(
         self,
-        ctx: "commands.Context",
+        ctx: commands.Context,
         source: typing.Optional[_ScriptCode] = None,
         *,
         text: str,
@@ -51,7 +51,7 @@ class Transliterate(commands.Cog):
         )
 
     @commands.command()
-    async def scriptlist(self, ctx: "commands.Context"):
+    async def scriptlist(self, ctx: commands.Context):
         """
         List available language scripts
         """

@@ -6,16 +6,16 @@ from discord.ext import commands
 
 
 class MassTyping(commands.Cog):
-    def __init__(self, bot: "commands.Bot"):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.typing = {}
 
     @commands.Cog.listener()
     async def on_typing(
         self,
-        channel: "discord.abc.Messageable",
-        user: Union["discord.User", "discord.Member"],
-        when: "datetime.datetime",
+        channel: discord.abc.Messageable,
+        user: Union[discord.User, discord.Member],
+        when: datetime.datetime,
     ):
         if channel not in self.typing:
             self.typing[channel] = {}
