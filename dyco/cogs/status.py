@@ -22,7 +22,9 @@ class Status(commands.Cog):
         Set/unset bot's activity status
         """
         if ctx.invoked_subcommand is None:
-            await self.get(ctx)
+            await ctx.send(
+                "{}{} requires a sub-command.".format(ctx.prefix, ctx.invoked_with)
+            )
 
     @status.command()
     async def playing(self, ctx: commands.Context, *, what: str):
