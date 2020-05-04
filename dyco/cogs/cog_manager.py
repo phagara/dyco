@@ -23,10 +23,10 @@ class CogManager(commands.Cog):
         Lists/enables/disables cogs.
         """
         if ctx.invoked_subcommand is None:
-            await self.cog_list(ctx)
+            await self.list(ctx)
 
     @cog.command()
-    async def cog_list(self, ctx: "commands.Context"):
+    async def list(self, ctx: "commands.Context"):
         """
         Lists all installed cogs.
         """
@@ -48,7 +48,7 @@ class CogManager(commands.Cog):
         )
 
     @cog.command()
-    async def cog_enable(self, ctx: "commands.Context", cog_name: str):
+    async def enable(self, ctx: "commands.Context", cog_name: str):
         """
         Enables a cog.
         """
@@ -70,7 +70,7 @@ class CogManager(commands.Cog):
         await ctx.send("Cog enabled.")
 
     @cog.command()
-    async def cog_disable(self, ctx: "commands.Context", cog_name: str):
+    async def disable(self, ctx: "commands.Context", cog_name: str):
         """
         Disables a cog.
         """
