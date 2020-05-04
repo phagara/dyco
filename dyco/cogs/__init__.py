@@ -4,6 +4,7 @@ from .link_untrack import LinkUntrack
 from .mass_typing import MassTyping
 from .quit import Quit
 from .reconnect_notify import ReconnectNotify
+from .status import Status
 from .transliterate import Transliterate
 from .uptime import Uptime
 from .version import Version
@@ -15,6 +16,7 @@ ALL_COGS = [
     MassTyping,
     Quit,
     ReconnectNotify,
+    Status,
     Transliterate,
     Uptime,
     Version,
