@@ -8,6 +8,8 @@ from discord.ext import commands
 class Status(commands.Cog):
     """
     Bot activity status manager.
+
+    Only playing, listening and streaming activities are supported for bots.
     """
 
     def __init__(self, bot: commands.Bot):
@@ -37,18 +39,11 @@ class Status(commands.Cog):
         await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=what))
 
     @status.command()
-    async def watching(self, ctx: commands.Context, *, what: str):
-        """
-        Sets activity to "Watching <what>"
-        """
-        await self.bot.change_presence(activity=discord.Activity(tpye=discord.ActivityType.watching, name=what))
-
-    @status.command()
     async def streaming(self, ctx: commands.Context, *, what: str):
         """
         Sets activity to "Streaming <what>"
         """
-        await self.bot.change_presence(activity=discord.Streaming(name=what, url=None))
+        await self.bot.change_presence(activity=discord.Streaming(name=what, url="https://www.youtube.com/watch?v=dQw4w9WgXcQ"))
 
     @status.command()
     async def unset(self, ctx: commands.Context):
