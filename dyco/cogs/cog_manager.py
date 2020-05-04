@@ -35,13 +35,13 @@ class CogManager(commands.Cog):
                 "\n\t".join(
                     [
                         "{}\t{}".format(name, cog.description)
-                        for name, cog in self.loaded_cogs
+                        for name, cog in self.loaded_cogs.items()
                     ]
                 ),
                 "\n\t".join(
                     [
                         "{}\t{}".format(name, cog.description)
-                        for name, cog in self.unloaded_cogs
+                        for name, cog in self.unloaded_cogs.items()
                     ]
                 ),
             )
