@@ -82,7 +82,6 @@ class CogManager(commands.Cog):
             await ctx.send("No such cog.")
             return
 
-        cog = self.bot.get_cog(cog_name)
-        self.bot.remove_cog(cog)
-        self.unloaded_cogs[cog_name] = cog
+        self.unloaded_cogs[cog_name] = self.bot.get_cog(cog_name)
+        self.bot.remove_cog(cog_name)
         await ctx.send("Cog disabled.")
