@@ -1,3 +1,4 @@
+from .cog_manager import CogManager
 from .error_notify import ErrorNotify
 from .link_untrack import LinkUntrack
 from .mass_typing import MassTyping
@@ -8,6 +9,7 @@ from .uptime import Uptime
 from .version import Version
 
 ALL_COGS = [
+    CogManager,
     ErrorNotify,
     LinkUntrack,
     MassTyping,
