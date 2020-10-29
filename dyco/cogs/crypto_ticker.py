@@ -24,8 +24,8 @@ class CryptoTicker(commands.Cog):
         self._channel: typing.Optional[discord.TextChannel] = None
         self._sub: int = 0
         self._last_updated_at: int = 0
-        self.subscribe.add_exception_type(websockets.exceptions.ConnectionClosedError)
-        self.subscribe.start()
+        self.subscribe.add_exception_type(websockets.exceptions.ConnectionClosedError)  # pylint: disable=no-member
+        self.subscribe.start()  # pylint: disable=no-member
 
     @property
     def channel(self):
@@ -34,7 +34,7 @@ class CryptoTicker(commands.Cog):
         return self._channel
 
     def cog_unload(self):
-        self.subscribe.cancel()
+        self.subscribe.cancel()  # pylint: disable=no-member
 
     @tasks.loop()
     async def subscribe(self):
