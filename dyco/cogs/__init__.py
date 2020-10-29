@@ -1,4 +1,5 @@
 from .cog_manager import CogManager
+from .crypto_ticker import CryptoTicker
 from .error_notify import ErrorNotify
 from .latency import Latency
 from .link_untrack import LinkUntrack
@@ -12,6 +13,7 @@ from .version import Version
 
 ALL_COGS = [
     CogManager,
+    CryptoTicker,
     ErrorNotify,
     Latency,
     LinkUntrack,
