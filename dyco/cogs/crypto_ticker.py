@@ -12,6 +12,7 @@ class CryptoTicker(commands.Cog):
     """
     Continuously updates a channel topic with cryptocurrency exchange rates.
     """
+
     WS_API_KWARGS = {
         "uri": "wss://api-pub.bitfinex.com/ws/2",
     }
@@ -40,11 +41,7 @@ class CryptoTicker(commands.Cog):
         async with websockets.connect(**self.WS_API_KWARGS) as wss:
             await wss.send(
                 json.dumps(
-                    {
-                        "event": "subscribe",
-                        "channel": "ticker",
-                        "symbol": "tBTCUSD"
-                    }
+                    {"event": "subscribe", "channel": "ticker", "symbol": "tBTCUSD"}
                 )
             )
             async for message in wss:
@@ -57,9 +54,22 @@ class CryptoTicker(commands.Cog):
     async def handle(self, message: typing.Any):
         if isinstance(message, dict) and "chanId" in message:
             self._sub = message["chanId"]
-        elif isinstance(message, list) and message[0] == self._sub and message[1] != "hb":
+        elif (
+            isinstance(message, list) and message[0] == self._sub and message[1] != "hb"
+        ):
             data = message[1]
-            bid, bid_size, ask, ask_size, daily_change, daily_change_relative, last_price, volume, high, low = data[:10]
+            (
+                bid,
+                bid_size,
+                ask,
+                ask_size,
+                daily_change,
+                daily_change_relative,
+                last_price,
+                volume,
+                high,
+                low,
+            ) = data[:10]
 
             if daily_change_relative >= 0.05:
                 emoji = "\N{LAST QUARTER MOON WITH FACE}"
