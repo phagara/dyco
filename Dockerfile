@@ -24,9 +24,9 @@ WORKDIR /app
 
 RUN \
     apk add --no-cache --virtual .build-deps 'gcc=9.3.0-r2' 'musl-dev=1.1.24-r9' &&\
-    pip install --no-cache --require-hashes -r /app/requirements.txt &&\
+    pip install --no-cache-dir --require-hashes -r /app/requirements.txt &&\
     apk del --no-network .build-deps &&\
-    pip install --no-cache --no-index --no-deps . &&\
+    pip install --no-cache-dir --no-index --no-deps . &&\
     rm -rf /app &&\
     addgroup -g 1000 dyco &&\
     adduser -D -u 1000 -G dyco dyco
