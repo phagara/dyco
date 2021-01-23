@@ -67,7 +67,7 @@ jobs:
           fetch-depth: 1
       - name: set env variables
         env:
-          IMAGE_NAME: dyco/dyco
+          IMAGE_NAME: quay.io/dyco/dyco
         run: |
           GIT_SHORT_SHA=${GITHUB_SHA:0:8}
           GIT_TAG=$(echo ${GITHUB_REF} | sed -e 's,^refs/tags/,,')
