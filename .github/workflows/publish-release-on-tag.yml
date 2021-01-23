@@ -73,10 +73,10 @@ jobs:
           fetch-depth: 1
       - name: set env variables
         env:
-          IMAGE_NAME: ${{ github.repository }}
+          IMAGE_NAME: dyco
         run: |
-          GIT_SHORT_SHA="${${{ github.sha }}:0:8}"
-          GIT_TAG="$(echo ${{ github.ref }} | sed -e 's,^refs/tags/,,')"
+          GIT_SHORT_SHA=${GITHUB_SHA:0:8}
+          GIT_TAG=$(echo ${GITHUB_REF} | sed -e 's,^refs/tags/,,')
           IMAGE_TAGS="${IMAGE_NAME}:${GIT_SHORT_SHA},${IMAGE_NAME}:${GIT_TAG}"
           [ "$(git tag | sort -V | tail -n1)" == "${GIT_TAG}" ] && IMAGE_TAGS+=",${IMAGE_NAME}:latest"
           echo "image_tags=${IMAGE_TAGS}" >> ${GITHUB_ENV}
@@ -87,8 +87,8 @@ jobs:
       - uses: docker/login-action@v1
         with:
           registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.CR_PAT }}
+          username: ${{ secrets.CR_LOGIN }}
+          password: ${{ secrets.CR_PASSWORD }}
       - uses: docker/build-push-action@v2
         with:
           platforms: linux/amd64,linux/arm64
