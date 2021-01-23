@@ -23,7 +23,7 @@ COPY LICENSE MANIFEST.in requirements.txt setup.py /app/
 WORKDIR /app
 
 RUN \
-    pip install --no-cache-dir wheel &&\
+    pip install --no-cache-dir wheel==0.36.2 &&\
     pip install --no-cache-dir -r /app/requirements.txt &&\
     pip install --no-cache-dir --no-index --no-deps . &&\
     rm -rf /app &&\
