@@ -50,10 +50,9 @@ class LinkUntrack(commands.Cog):
                 corrected_urls.append(urllib.parse.urlunparse(url))
 
         if corrected_urls:
-            async with message.channel.typing():
-                await message.channel.send(
-                    "Links with tracking crap removed:\n\t- {}".format(
-                        "\n\t- ".join(corrected_urls)
-                    )
-                )
             await message.add_reaction("\N{pile of poo}")
+            await message.channel.send(
+                "Links with tracking crap removed:\n\t- {}".format(
+                    "\n\t- ".join(corrected_urls)
+                )
+            )
