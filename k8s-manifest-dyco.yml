@@ -16,9 +16,7 @@ spec:
     spec:
       containers:
         - name: dyco-app
-          image: dycobot/dyco
+          image: quay.io/dyco/dyco
           envFrom:
             - secretRef:
                 name: dyco-secrets
-      imagePullSecrets:
-        - name: dyco-registry-creds
