@@ -71,29 +71,28 @@ jobs:
       - uses: actions/checkout@master
         with:
           fetch-depth: 1
-      - name: qemu-user-static install
+      - name: set env variables
+        env:
+          IMAGE_NAME: ${{ github.repository }}
         run: |
-          docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-      - name: docker buildx enable
-        run: |
-          docker buildx ls
-          docker buildx create --use --name mybuilder
-          docker buildx inspect --bootstrap
-          docker buildx install
-      - name: dockerhub registry login
-        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_LOGIN }}" --password-stdin
-      - name: build and push image
-        run: |
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,^refs/tags/,,')
-
-          TAGS=("dyco:${VERSION}")
-          [ "$(git tag | sort -V | tail -n1)" == "${VERSION}" ] && TAGS+=("dyco:latest")
-          echo "TAGS=${TAGS[@]}"
-
-          # build cli option array for tags
-          declare -a TAG_ARGS=()
-          for tag in "${TAGS[@]}"; do
-            TAG_ARGS+=(--tag "${{ secrets.DOCKERHUB_LOGIN }}/${tag}")
-          done
-
-          docker build --push --platform "${DOCKER_PLATFORMS// /,}" "${TAG_ARGS[@]}" --build-arg DYCO_VERSION="${VERSION}" .
+          GIT_SHORT_SHA="${${{ github.sha }}:0:8}"
+          GIT_TAG="$(echo ${{ github.ref }} | sed -e 's,^refs/tags/,,')"
+          IMAGE_TAGS="${IMAGE_NAME}:${GIT_SHORT_SHA},${IMAGE_NAME}:${GIT_TAG}"
+          [ "$(git tag | sort -V | tail -n1)" == "${GIT_TAG}" ] && IMAGE_TAGS+=",${IMAGE_NAME}:latest"
+          echo "image_tags=${IMAGE_TAGS}" >> ${GITHUB_ENV}
+      - uses: docker/setup-qemu-action@v1
+      - uses: docker/setup-buildx-action@v1
+        with:
+          install: true
+      - uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.CR_PAT }}
+      - uses: docker/build-push-action@v2
+        with:
+          platforms: linux/amd64,linux/arm64
+          push: true
+          build-args: |
+            DYCO_VERSION=${{ env.tag }}
+          tags: ${{ env.image_tags }}
