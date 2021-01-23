@@ -91,26 +91,6 @@ This file is referred to as `<DYCO_SECRETS_FILE>`.
 kubectl apply -f <DYCO_SECRETS_FILE>
 ```
 
-#### create github token for registry auth
-
-  * go to https://github.com/settings/tokens
-  * click "create new token"
-  * enter some note to help you identify this token
-  * tick the "repo" and "read:packages" checkboxes
-  * confirm by pressing the big green button at the bottom
-
-Copy the secret token shown, this is your `<GH_TOKEN>`.
-
-#### apply github docker registry creds to k8s cluster
-
-Replace `<GH_USER>` with your Github username,
-`<GH_EMAIL>` with the associated e-mail address
-and `<GH_TOKEN>` with the value from previous step.
-
-```bash
-kubectl create secret docker-registry dyco-registry-creds --docker-server=docker.pkg.github.com --docker-username=<GH_USER> --docker-password=<GH_TOKEN> --docker-email=<GH_EMAIL>
-```
-
 ### deploy dyco
 
 ```bash
