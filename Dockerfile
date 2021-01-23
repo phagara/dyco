@@ -23,9 +23,8 @@ COPY LICENSE MANIFEST.in requirements.txt setup.py /app/
 WORKDIR /app
 
 RUN \
-    apk add --no-cache --virtual .build-deps 'gcc=9.3.0-r2' 'musl-dev=1.1.24-r10' &&\
-    pip install --no-cache-dir --require-hashes -r /app/requirements.txt &&\
-    apk del --no-network .build-deps &&\
+    pip install --no-cache-dir wheel &&\
+    pip install --no-cache-dir -r /app/requirements.txt &&\
     pip install --no-cache-dir --no-index --no-deps . &&\
     rm -rf /app &&\
     addgroup -g 1000 dyco &&\
