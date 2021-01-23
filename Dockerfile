@@ -24,7 +24,9 @@ WORKDIR /app
 
 RUN \
     pip install --no-cache-dir wheel==0.36.2 &&\
+    apk add --no-cache --virtual .build-deps 'gcc=9.3.0-r2' 'musl-dev=1.1.24-r10' &&\
     pip install --no-cache-dir -r /app/requirements.txt &&\
+    apk del --no-network .build-deps &&\
     pip install --no-cache-dir --no-index --no-deps . &&\
     rm -rf /app &&\
     addgroup -g 1000 dyco &&\
