@@ -1,4 +1,5 @@
 import typing
+import inspect
 
 import tabulate
 from discord.ext import commands
@@ -21,6 +22,14 @@ class CogManager(commands.Cog):
     def all_cogs(self) -> typing.Mapping[str, commands.Cog]:
         return self.loaded_cogs | self.unloaded_cogs
 
+    @staticmethod
+    def _shortdesc(cog):
+        cleaned = inspect.cleandoc(cog.description)
+        lines = cleaned.splitlines()
+        if "" in lines:
+            lines = lines[:lines.index("")]
+        return " ".join(lines)
+
     @commands.group()
     @commands.is_owner()
     async def cog(self, ctx: commands.Context):
@@ -37,7 +46,7 @@ class CogManager(commands.Cog):
         """
         cols = ("Enabled", "Name", "Description")
         rows = (
-            (name in self.loaded_cogs, name, cog.description.splitlines()[0])
+            (name in self.loaded_cogs, name, self._shortdesc(cog))
             for name, cog in self.all_cogs.items()
         )
         table = tabulate.tabulate(rows, headers=cols)
