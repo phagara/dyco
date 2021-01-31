@@ -27,7 +27,7 @@ class CogManager(commands.Cog):
         cleaned = inspect.cleandoc(cog.description)
         lines = cleaned.splitlines()
         if "" in lines:
-            lines = lines[:lines.index("")]
+            lines = lines[: lines.index("")]
         return " ".join(lines)
 
     @commands.group()
