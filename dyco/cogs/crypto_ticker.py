@@ -21,7 +21,7 @@ class CryptoTicker(commands.Cog):
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self._channel: typing.Optional[discord.TextChannel] = None
+        self._channel: typing.Optional[discord.TextChannel] = None  # pylint: disable=unsubscriptable-object
         self._sub: int = 0
         self._last_updated_at: int = 0
         self.subscribe.add_exception_type(  # pylint: disable=no-member
