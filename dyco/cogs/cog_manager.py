@@ -41,7 +41,7 @@ class CogManager(commands.Cog):
             for name, cog in self.all_cogs.items()
         )
         table = tabulate.tabulate(rows, headers=cols)
-        await ctx.send(table)
+        await ctx.send(f"```{table}```")
 
     @cog.command()
     async def enable(self, ctx: commands.Context, cog_name: str):
