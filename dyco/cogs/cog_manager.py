@@ -1,5 +1,6 @@
 import typing
 
+import tabulate
 from discord.ext import commands
 
 
@@ -16,6 +17,10 @@ class CogManager(commands.Cog):
     def loaded_cogs(self) -> typing.Mapping[str, commands.Cog]:
         return {name: obj for name, obj in self.bot.cogs.items() if obj != self}
 
+    @property
+    def all_cogs(self) -> typing.Mapping[str, commands.Cog]:
+        return self.loaded_cogs | self.unloaded_cogs
+
     @commands.group()
     @commands.is_owner()
     async def cog(self, ctx: commands.Context):
@@ -30,22 +35,17 @@ class CogManager(commands.Cog):
         """
         Lists all installed cogs
         """
-        await ctx.send(
-            "```Enabled cogs:\n\t{}\nDisabled cogs:\n\t{}```".format(
-                "\n\t".join(
-                    [
-                        "{}\t{}".format(name, cog.description)
-                        for name, cog in self.loaded_cogs.items()
-                    ]
-                ),
-                "\n\t".join(
-                    [
-                        "{}\t{}".format(name, cog.description)
-                        for name, cog in self.unloaded_cogs.items()
-                    ]
-                ),
+        cols = ("Enabled", "Name", "Description")
+        rows = (
+            (
+                name in self.loaded_cogs,
+                name,
+                cog.description
             )
+            for name, cog in self.all_cogs.items()
         )
+        table = tabulate.tabulate(rows, headers=cols)
+        await ctx.send(table)
 
     @cog.command()
     async def enable(self, ctx: commands.Context, cog_name: str):

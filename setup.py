@@ -18,11 +18,11 @@ setuptools.setup(
         "urlextract",
         "humanize",
         "transliterate",
+        "tabulate",
     ],
-    python_requires=">=3.8",
+    python_requires=">=3.9",
     classifiers=[
         "Development Status :: 4 - Beta",
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Environment :: No Input/Output (Daemon)",
         "License :: OSI Approved :: BSD License",

@@ -16,7 +16,7 @@ class CryptoTicker(commands.Cog):
     WS_API_KWARGS = {
         "uri": "wss://api-pub.bitfinex.com/ws/2",
     }
-    CHANNEL_ID = 381087402741202945
+    CHANNEL_ID = 381087402741202945  # TODO: make configurable
     TOPIC_EDIT_DELAY = 600
 
     def __init__(self, bot: commands.Bot):

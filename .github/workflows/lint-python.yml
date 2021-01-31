@@ -19,7 +19,7 @@ jobs:
           fetch-depth: 1
       - uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.9
       - run: |
           python3 -m pip install --upgrade pip
           # need to install setuptools first, as wrapt's (pylint sub-dep) install scripts depends on it
@@ -35,7 +35,7 @@ jobs:
           fetch-depth: 1
       - uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.9
       - run: |
           python3 -m pip install --upgrade pip
           python3 -m pip install -r .github/workflows/black-requirements.txt
