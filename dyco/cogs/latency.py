@@ -6,7 +6,7 @@ from discord.ext import commands
 
 class Latency(commands.Cog):
     """
-    Measures the Doscord websocket latency.
+    Measures the Discord websocket latency.
     """
 
     def __init__(self, bot: commands.Bot):
