@@ -19,6 +19,7 @@ setuptools.setup(
         "humanize",
         "transliterate",
         "tabulate",
+        "aioprometheus",
     ],
     python_requires=">=3.9",
     classifiers=[
