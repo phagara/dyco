@@ -37,7 +37,7 @@ class CogManager(commands.Cog):
         """
         cols = ("Enabled", "Name", "Description")
         rows = (
-            (name in self.loaded_cogs, name, cog.description)
+            (name in self.loaded_cogs, name, cog.description.splitlines()[0])
             for name, cog in self.all_cogs.items()
         )
         table = tabulate.tabulate(rows, headers=cols)
