@@ -15,10 +15,7 @@ class Metrics(commands.Cog):
         self.service = Service()
         self.registry = Registry()
 
-        self.events = Counter(
-            "events",
-            "Various Discord API event counts."
-        )
+        self.events = Counter("events", "Discord API event counts.")
         self.registry.register(self.events)
 
         self.serve.start()  # pylint: disable=no-member
