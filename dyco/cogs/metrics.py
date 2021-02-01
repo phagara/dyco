@@ -79,11 +79,11 @@ class Metrics(commands.Cog):
 
     @commands.Cog.listener()
     async def on_socket_raw_receive(self, *_):
-        self.events.inc({"type", "socket_raw_receive"})
+        self.events.inc({"type": "socket_raw_receive"})
 
     @commands.Cog.listener()
     async def on_socket_raw_send(self, *_):
-        self.events.inc({"type", "socket_raw_send"})
+        self.events.inc({"type": "socket_raw_send"})
 
     @commands.Cog.listener()
     async def on_typing(self, *_):
