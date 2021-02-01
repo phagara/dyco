@@ -25,7 +25,7 @@ class Metrics(commands.Cog):
 
     @tasks.loop()
     async def serve(self):
-        self.service.start(port=42069)
+        await self.service.start(port=42069)
         logging.info("Serving Prometheus metrics on: %s", self.service.metrics_url)
 
     @tasks.loop(minutes=1)
