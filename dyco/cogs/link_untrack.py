@@ -22,17 +22,17 @@ class LinkUntrack(commands.Cog):
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+        self.urlextractor = urlextract.URLExtract()
 
         # create/update TLD cache
-        urlextract.URLExtract().update()
+        self.urlextractor.update()
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
         if message.author == self.bot.user:
             return
 
-        urlextractor = urlextract.URLExtract()
-        urls = urlextractor.find_urls(message.content)
+        urls = self.urlextractor.find_urls(message.content)
         if not urls:
             return
 
