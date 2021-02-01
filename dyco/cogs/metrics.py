@@ -23,7 +23,7 @@ class Metrics(commands.Cog):
         self.serve.start()  # pylint: disable=no-member
         self.update_latency.start()  # pylint: disable=no-member
 
-    @tasks.loop()
+    @tasks.loop(count=1, reconnect=False)
     async def serve(self):
         await self.service.start(port=42069)
         logging.info("Serving Prometheus metrics on: %s", self.service.metrics_url)
