@@ -30,7 +30,7 @@ class Metrics(commands.Cog):
 
     @tasks.loop(minutes=1)
     async def update_latency(self):
-        self.latency.observe({"seconds"}, self.bot.latency)
+        self.latency.observe({"type": "seconds"}, self.bot.latency)
 
     @update_latency.before_loop
     async def before_update_latency(self):
