@@ -7,7 +7,7 @@ from discord.ext import tasks, commands
 
 class Metrics(commands.Cog):
     """
-    Exports metrics in Prometheus exposition format via HTTP on port 42069.
+    Exports metrics in Prometheus exposition format via HTTP on port 9100.
     """
 
     def __init__(self, bot: commands.Bot):
@@ -25,7 +25,7 @@ class Metrics(commands.Cog):
 
     @tasks.loop(count=1, reconnect=False)
     async def serve(self):
-        await self.service.start(port=42069)
+        await self.service.start(port=9100)
         logging.info("Serving Prometheus metrics on: %s", self.service.metrics_url)
 
     @tasks.loop(minutes=1)
