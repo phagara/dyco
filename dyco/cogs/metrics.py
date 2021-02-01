@@ -21,7 +21,7 @@ class Metrics(commands.Cog):
         self.latency = Histogram("latency", "Discord API latency.")
 
         self.serve.start()  # pylint: disable=no-member
-        self.serve.update_latency()  # pylint: disable=no-member
+        self.update_latency.start()  # pylint: disable=no-member
 
     @tasks.loop()
     async def serve(self):
