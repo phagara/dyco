@@ -18,15 +18,27 @@ class Metrics(commands.Cog):
         self.events = Counter("events", "Discord API event counts.")
         self.registry.register(self.events)
 
+        self.latency = Histogram("latency", "Discord API latency.")
+
         self.serve.start()  # pylint: disable=no-member
+        self.serve.update_latency()  # pylint: disable=no-member
 
     @tasks.loop()
     async def serve(self):
         self.service.start(port=42069)
         logging.info("Serving Prometheus metrics on: %s", self.service.metrics_url)
 
+    @tasks.loop(minutes=1)
+    async def update_latency(self):
+        self.latency.observe({"seconds"}, self.bot.latency)
+
+    @update_latency.before_loop
+    async def before_update_latency(self):
+        await self.bot.wait_until_ready()
+
     def cog_unload(self):
         self.serve.cancel()  # pylint: disable=no-member
+        self.update_latency.cancel()  # pylint: disable=no-member
 
     @commands.Cog.listener()
     async def on_connect(self):

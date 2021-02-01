@@ -4,6 +4,7 @@ from .error_notify import ErrorNotify
 from .latency import Latency
 from .link_untrack import LinkUntrack
 from .mass_typing import MassTyping
+from .metrics import Metrics
 from .nitter_to_twitter import NitterToTwitter
 from .quit import Quit
 from .reconnect_notify import ReconnectNotify
@@ -19,6 +20,7 @@ ALL_COGS = [
     Latency,
     LinkUntrack,
     MassTyping,
+    Metrics,
     NitterToTwitter,
     Quit,
     ReconnectNotify,
