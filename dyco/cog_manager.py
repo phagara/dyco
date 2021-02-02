@@ -1,3 +1,6 @@
+"""
+Cog (bot plugin) management.
+"""
 import typing
 import inspect
 import logging
@@ -15,14 +18,10 @@ def get_config(bot: commands.Bot, cog: str) -> typing.Mapping[str, typing.Any]:
 
 
 class CogManager(commands.Cog):
-    """
-    Cog (bot plugin) management.
-    """
-
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self._conf: typing.Optional[typing.Mapping[str, any]] = None
-        self._cogs_dir = pathlib.Path(__package__).joinpath("cogs")
+        self._cogs_dir = pathlib.Path(__file__).parent.joinpath("cogs")
 
     @property
     def conf(self) -> typing.Optional[typing.Mapping[str, any]]:
