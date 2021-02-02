@@ -22,7 +22,9 @@ def parse_config(config: typing.Mapping[str, typing.Any]) -> Config:
     VALIDATOR_CONFIG.validate(config)
 
     return Config(
-        channel=config["channel"], separator=config["separator"], pairs=config["pairs"],
+        channel=config["channel"],
+        separator=config["separator"],
+        pairs=config["pairs"],
     )
 
 
@@ -30,12 +32,19 @@ def parse_message(
     message: typing.Union[typing.Mapping[str, typing.Any], typing.List]
 ) -> Message:
     if VALIDATOR_HEARTBEAT.is_valid(message):
-        return Heartbeat(chanId=message[0],)
+        return Heartbeat(
+            chanId=message[0],
+        )
     if VALIDATOR_INFO_V2.is_valid(message):
-        return InfoV2(serverId=message["serverId"], platform=message["platform"],)
+        return InfoV2(
+            serverId=message["serverId"],
+            platform=message["platform"],
+        )
     if VALIDATOR_TICKER_TRADING_SUBSCRIBE_RESPONSE.is_valid(message):
         return TickerTradingSubscribeResponse(
-            chanId=message["chanId"], symbol=message["symbol"], pair=message["pair"],
+            chanId=message["chanId"],
+            symbol=message["symbol"],
+            pair=message["pair"],
         )
     if VALIDATOR_TICKER_TRADING_UPDATE.is_valid(message):
         return TickerTradingUpdate(

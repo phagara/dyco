@@ -26,7 +26,10 @@ class NitterToTwitter(commands.Cog):
         for url in urls:
             url = urllib.parse.urlparse(url)
             if url.netloc == "nitter.net":
-                url = url._replace(netloc="twitter.com", fragment="",)
+                url = url._replace(
+                    netloc="twitter.com",
+                    fragment="",
+                )
                 rewritten_urls.append(urllib.parse.urlunparse(url))
 
         if rewritten_urls:
