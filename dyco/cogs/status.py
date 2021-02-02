@@ -1,17 +1,14 @@
-import typing
-import logging
+"""
+Bot activity status manager.
+
+Only playing, listening and streaming activities are supported for bots.
+"""
 
 import discord
 from discord.ext import commands
 
 
 class Status(commands.Cog):
-    """
-    Bot activity status manager.
-
-    Only playing, listening and streaming activities are supported for bots.
-    """
-
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
@@ -59,3 +56,8 @@ class Status(commands.Cog):
         Unset the activity status of the bot
         """
         await self.bot.change_presence(activity=None)
+
+
+def setup(bot: commands.Bot) -> None:
+    cog = Status(bot)
+    bot.add_cog(cog)

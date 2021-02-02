@@ -1,11 +1,10 @@
+"""
+Sends the bot's description/version string on demand.
+"""
 from discord.ext import commands
 
 
 class Version(commands.Cog):
-    """
-    Sends the bot's description/version string on demand.
-    """
-
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
@@ -15,3 +14,8 @@ class Version(commands.Cog):
         Shows the bot's version
         """
         await ctx.send(self.bot.description)
+
+
+def setup(bot: commands.Bot) -> None:
+    cog = Version(bot)
+    bot.add_cog(cog)

@@ -1,13 +1,12 @@
+"""
+Sends event error logs to bot owner in a DM.
+"""
 import traceback
 
 from discord.ext import commands
 
 
 class ErrorNotify(commands.Cog):
-    """
-    Sends event error logs to bot owner in a DM.
-    """
-
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
@@ -19,3 +18,8 @@ class ErrorNotify(commands.Cog):
                 event, args, kwargs, traceback.format_exc()
             )
         )
+
+
+def setup(bot: commands.Bot) -> None:
+    cog = ErrorNotify(bot)
+    bot.add_cog(cog)

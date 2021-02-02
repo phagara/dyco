@@ -1,3 +1,6 @@
+"""
+Joins in on the stampede.
+"""
 import datetime
 from typing import Union
 
@@ -6,9 +9,8 @@ from discord.ext import commands
 
 
 class MassTyping(commands.Cog):
-    """
-    Joins in on the stampede.
-    """
+
+    TYPING_USERS_THRESHOLD = 3
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -34,5 +36,10 @@ class MassTyping(commands.Cog):
             if age_sec > 10:
                 del self.typing[channel][typing_user]
 
-        if len(self.typing[channel]) >= 3:
+        if len(self.typing[channel]) >= self.TYPING_USERS_THRESHOLD:
             await channel.trigger_typing()
+
+
+def setup(bot: commands.Bot) -> None:
+    cog = MassTyping(bot)
+    bot.add_cog(cog)

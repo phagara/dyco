@@ -1,24 +1,27 @@
+"""
+Transliterates to and from various language scripts.
+"""
 import typing
 import transliterate
 
 from discord.ext import commands
 
 
-_AVAIL_SCRIPTS = {
+AVAIL_SCRIPTS = {
     pack.language_code: pack.language_name
     for pack in transliterate.get_available_language_packs()
 }
 
 
-class _ScriptCode(str):
+class ScriptCode(str):
     @staticmethod
     def avail_as_str():
         return ", ".join(
-            ["{} ({})".format(code, name) for code, name in _AVAIL_SCRIPTS.items()]
+            ["{} ({})".format(code, name) for code, name in AVAIL_SCRIPTS.items()]
         )
 
     def __new__(cls, text):
-        if text in _AVAIL_SCRIPTS:
+        if text in AVAIL_SCRIPTS:
             return str(text)
         raise TypeError(
             "Unknown target script code. Pick one of: {}".format(cls.avail_as_str())
@@ -26,12 +29,8 @@ class _ScriptCode(str):
 
 
 class Transliterate(commands.Cog):
-    """
-    Transliterates to and from various language scripts.
-    """
-
     @commands.command()
-    async def translit(self, ctx: commands.Context, target: _ScriptCode, *, text: str):
+    async def translit(self, ctx: commands.Context, target: ScriptCode, *, text: str):
         """
         Transliterates text to given script
         """
@@ -42,7 +41,7 @@ class Transliterate(commands.Cog):
         self,
         ctx: commands.Context,
         source: typing.Optional[  # pylint: disable=unsubscriptable-object
-            _ScriptCode
+            ScriptCode
         ] = None,
         *,
         text: str,
@@ -60,5 +59,10 @@ class Transliterate(commands.Cog):
         List available language scripts
         """
         await ctx.send(
-            "Available language scripts: {}".format(_ScriptCode.avail_as_str())
+            "Available language scripts: {}".format(ScriptCode.avail_as_str())
         )
+
+
+def setup(bot: commands.Bot) -> None:
+    cog = Transliterate(bot)
+    bot.add_cog(cog)

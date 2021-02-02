@@ -1,11 +1,10 @@
+"""
+Gives bot owner the ability to gracefully terminate the bot.
+"""
 from discord.ext import commands
 
 
 class Quit(commands.Cog):
-    """
-    Gives bot owner the ability to gracefully terminate the bot.
-    """
-
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.started = False
@@ -28,3 +27,8 @@ class Quit(commands.Cog):
         """
         await ctx.send("Shutting down...")
         await ctx.bot.logout()
+
+
+def setup(bot: commands.Bot) -> None:
+    cog = Quit(bot)
+    bot.add_cog(cog)

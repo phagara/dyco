@@ -6,3 +6,4 @@ transliterate==1.10.2
 websockets==8.1
 tabulate==0.8.7
 aioprometheus==20.0.1
+jsonschema==3.2.0

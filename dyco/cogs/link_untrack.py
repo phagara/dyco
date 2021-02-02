@@ -1,15 +1,15 @@
+"""
+Reposts URLs with tracking query strings removed.
+"""
+import logging
 import urllib.parse
-import urlextract
 
+import urlextract
 import discord
 from discord.ext import commands
 
 
 class LinkUntrack(commands.Cog):
-    """
-    Reposts URLs with tracking query strings removed.
-    """
-
     FORBIDDEN_QUERY_STRINGS = [
         "fbclid",
         "gclid",
@@ -53,3 +53,8 @@ class LinkUntrack(commands.Cog):
                     "\n\t- ".join(corrected_urls)
                 )
             )
+
+
+def setup(bot: commands.Bot) -> None:
+    cog = LinkUntrack(bot)
+    bot.add_cog(cog)

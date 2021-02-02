@@ -1,3 +1,6 @@
+"""
+Rewrites nitter.net URLs to twitter.com.
+"""
 import urllib.parse
 import urlextract
 
@@ -6,23 +9,16 @@ from discord.ext import commands
 
 
 class NitterToTwitter(commands.Cog):
-    """
-    Rewrites nitter.net URLs to twitter.com.
-    """
-
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-
-        # create/update TLD cache
-        urlextract.URLExtract().update()
+        self.urlextractor = urlextract.URLExtract()
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
         if message.author == self.bot.user:
             return
 
-        urlextractor = urlextract.URLExtract()
-        urls = urlextractor.find_urls(message.content)
+        urls = self.urlextractor.find_urls(message.content)
         if not urls:
             return
 
@@ -30,10 +26,7 @@ class NitterToTwitter(commands.Cog):
         for url in urls:
             url = urllib.parse.urlparse(url)
             if url.netloc == "nitter.net":
-                url = url._replace(
-                    netloc="twitter.com",
-                    fragment="",
-                )
+                url = url._replace(netloc="twitter.com", fragment="",)
                 rewritten_urls.append(urllib.parse.urlunparse(url))
 
         if rewritten_urls:
@@ -42,3 +35,8 @@ class NitterToTwitter(commands.Cog):
                     "\n\t- ".join(rewritten_urls)
                 )
             )
+
+
+def setup(bot: commands.Bot) -> None:
+    cog = NitterToTwitter(bot)
+    bot.add_cog(cog)

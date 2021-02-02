@@ -1,4 +1,6 @@
-import time
+"""
+Exports metrics in Prometheus exposition format via HTTP on port 9100.
+"""
 import logging
 
 from aioprometheus import Service, Registry, Counter, Gauge, Summary, Histogram
@@ -6,19 +8,16 @@ from discord.ext import tasks, commands
 
 
 class Metrics(commands.Cog):
-    """
-    Exports metrics in Prometheus exposition format via HTTP on port 9100.
-    """
-
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.service = Service()
         self.registry = Registry()
+        self.service = Service(self.registry)
 
         self.events = Counter("events", "Discord API event counts.")
         self.registry.register(self.events)
 
         self.latency = Histogram("latency", "Discord API latency.")
+        self.registry.register(self.latency)
 
         self.serve.start()  # pylint: disable=no-member
         self.update_latency.start()  # pylint: disable=no-member
@@ -280,3 +279,8 @@ class Metrics(commands.Cog):
     @commands.Cog.listener()
     async def on_relationship_update(self, *_):
         self.events.inc({"type": "relationship_update"})
+
+
+def setup(bot: commands.Bot) -> None:
+    cog = Metrics(bot)
+    bot.add_cog(cog)
