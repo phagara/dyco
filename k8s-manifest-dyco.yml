@@ -1,3 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dyco-configmap
+data:
+  dyco.yaml: |
+    cogs:
+      crypto_ticker:
+        channel: 381087402741202945
+        separator: " … "
+        pairs:
+          - pair: "BTCUSD"
+            prefix: "\U0001F7E0 XBT: "
+          - pair: "ETHUSD"
+            prefix: "\U0001F4A0 ETH: "
+          - pair: "DOTUSD"
+            prefix: "\U0001F534 DOT: "
+          - pair: "XMRUSD"
+            prefix: "\U000024C2 XMR: "
+          - pair: "UNIUSD"
+            prefix: "\U0001F984 UNI: "
+      error_notify: {}
+      latency: {}
+      link_untrack: {}
+      mass_typing: {}
+      metrics: {}
+      nitter_to_twitter: {}
+      quit: {}
+      reconnect_notify: {}
+      status: {}
+      transliterate: {}
+      uptime: {}
+      version: {}
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -22,6 +56,17 @@ spec:
           envFrom:
             - secretRef:
                 name: dyco-secrets
+          env:
+            - name: DYCO_CONFIG
+              value: /config/dyco.yaml
+          volumeMounts:
+            - name: dyco-config-vol
+              mountPath: /config
+              readOnly: true
+      volumes:
+        - name: dyco-config-vol
+          configMap:
+            name: dyco-configmap
 ---
 apiVersion: v1
 kind: Service
@@ -44,7 +89,7 @@ metadata:
     app: dyco-app
   annotations:
     kubernetes.io/ingress.class: traefik
-    traefik.ingress.kubernetes.io/rule-type: "PathPrefixStrip"
+    traefik.ingress.kubernetes.io/rewrite-target: /metrics
 spec:
   rules:
     - http:
@@ -56,3 +101,79 @@ spec:
                 name: dyco-metrics
                 port:
                   number: 9100
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: dyco-netpol
+spec:
+  podSelector:
+    matchLabels:
+      app: dyco-app
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # k8s dns replies
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            namespace: kube-system
+        podSelector:
+          matchLabels:
+            k8s-app: kube-dns
+    # traefik ingress
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            namespace: kube-system
+        podSelector:
+          matchLabels:
+            app: traefik
+  egress:
+    # k8s dns requests
+    - to:
+      - namespaceSelector:
+          matchLabels:
+            namespace: kube-system
+        podSelector:
+          matchLabels:
+            k8s-app: kube-dns
+      ports:
+        - protocol: TCP
+          port: 53
+        - protocol: UDP
+          port: 53
+    # discord (cloudflare) ip ranges https://www.cloudflare.com/ips-v4
+    - to:
+      - ipBlock:
+          cidr: 173.245.48.0/20
+      - ipBlock:
+          cidr: 103.21.244.0/22
+      - ipBlock:
+          cidr: 103.22.200.0/22
+      - ipBlock:
+          cidr: 103.31.4.0/22
+      - ipBlock:
+          cidr: 141.101.64.0/18
+      - ipBlock:
+          cidr: 108.162.192.0/18
+      - ipBlock:
+          cidr: 190.93.240.0/20
+      - ipBlock:
+          cidr: 188.114.96.0/20
+      - ipBlock:
+          cidr: 197.234.240.0/22
+      - ipBlock:
+          cidr: 198.41.128.0/17
+      - ipBlock:
+          cidr: 162.158.0.0/15
+      - ipBlock:
+          cidr: 104.16.0.0/12
+      - ipBlock:
+          cidr: 172.64.0.0/13
+      - ipBlock:
+          cidr: 131.0.72.0/22
+      ports:
+        - port: 80
+        - port: 443
