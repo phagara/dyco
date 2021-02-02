@@ -40,9 +40,7 @@ class Transliterate(commands.Cog):
     async def untranslit(
         self,
         ctx: commands.Context,
-        source: typing.Optional[  # pylint: disable=unsubscriptable-object
-            ScriptCode
-        ] = None,
+        source: typing.Optional[ScriptCode] = None,
         *,
         text: str,
     ):

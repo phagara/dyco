@@ -20,9 +20,7 @@ class MassTyping(commands.Cog):
     async def on_typing(
         self,
         channel: discord.abc.Messageable,
-        user: Union[
-            discord.User, discord.Member
-        ],  # pylint: disable=unsubscriptable-object
+        user: Union[discord.User, discord.Member],
         when: datetime.datetime,
     ):
         if channel not in self.typing:

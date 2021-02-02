@@ -26,7 +26,7 @@ jobs:
           python3 -m pip install -r .github/workflows/setuptools-requirements.txt
           python3 -m pip install -r .github/workflows/pylint-requirements.txt
           python3 -m pip install -r requirements.txt
-          python3 -m pylint -E dyco
+          python3 -m pylint --errors-only --disable=unsubscriptable-object dyco
   black:
     runs-on: ubuntu-latest
     steps:
