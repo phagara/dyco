@@ -73,7 +73,6 @@ class Metrics(commands.Cog):
 
     @commands.Cog.listener()
     async def on_error(self, event, *_):
-        self.events.inc({"type": "error"})
         self.events.inc({"type": f"error_{event}"})
 
     @commands.Cog.listener()
