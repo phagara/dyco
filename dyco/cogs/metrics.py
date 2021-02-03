@@ -26,7 +26,9 @@ class Metrics(commands.Cog):
         self.registry.register(self.latency)
 
         self.gc_started: typing.Optional[float] = None
-        self.gc_latency = Histogram("gc_latency", "CPython garbage collector execution times.")
+        self.gc_latency = Histogram(
+            "gc_latency", "CPython garbage collector execution times."
+        )
         self.registry.register(self.gc_latency)
         self.gc_stats = Counter("gc_stats", "CPython garbage collector stats.")
         self.registry.register(self.gc_stats)
@@ -45,8 +47,7 @@ class Metrics(commands.Cog):
             self.gc_started = time.time()
         else:
             self.gc_latency.observe(
-                {"generation": info["generation"]},
-                time.time() - self.gc_started
+                {"generation": info["generation"]}, time.time() - self.gc_started
             )
 
     def hook_gc(self):
