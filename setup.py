@@ -21,6 +21,7 @@ setuptools.setup(
         "tabulate",
         "aioprometheus",
         "jsonschema",
+        "psutil",
     ],
     python_requires=">=3.9",
     classifiers=[
