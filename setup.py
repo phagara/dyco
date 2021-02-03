@@ -20,6 +20,7 @@ setuptools.setup(
         "transliterate",
         "tabulate",
         "aioprometheus",
+        "jsonschema",
     ],
     python_requires=">=3.9",
     classifiers=[
