@@ -1,8 +1,14 @@
 """
 Exports metrics in Prometheus exposition format via HTTP on port 9100.
 """
+import gc
+import os
+import time
+import typing
 import logging
+import itertools
 
+import psutil
 from aioprometheus import Service, Registry, Counter, Gauge, Summary, Histogram
 from discord.ext import tasks, commands
 
@@ -19,8 +25,52 @@ class Metrics(commands.Cog):
         self.latency = Histogram("latency", "Discord API latency.")
         self.registry.register(self.latency)
 
+        self.gc_started: typing.Optional[float] = None
+        self.gc_latency = Histogram("gc_latency", "CPython garbage collector execution times.")
+        self.registry.register(self.gc_latency)
+        self.gc_stats = Counter("gc_stats", "CPython garbage collector stats.")
+        self.registry.register(self.gc_stats)
+
+        self.process = psutil.Process(os.getpid())
+        self.resources = Gauge("resources", "Process resource usage gauges.")
+        self.registry.register(self.resources)
+
+        self.hook_gc()
+        self.update_gc_and_resource_stats.start()  # pylint: disable=no-member
         self.serve.start()  # pylint: disable=no-member
         self.update_latency.start()  # pylint: disable=no-member
+
+    def gc_callback(self, phase: str, info: typing.Mapping[str, int]):
+        if phase == "start":
+            self.gc_started = time.time()
+        else:
+            self.gc_latency.observe(
+                {"generation": info["generation"]},
+                time.time() - self.gc_started
+            )
+
+    def hook_gc(self):
+        gc.callbacks.append(self.gc_callback)
+
+    def unhook_gc(self):
+        gc.callbacks.remove(self.gc_callback)
+
+    @tasks.loop(minutes=1)
+    async def update_gc_and_resource_stats(self):
+        # gc stats
+        for gen, stats in zip(itertools.count(), gc.get_stats()):
+            for stat, value in stats.items():
+                self.gc_stats.set({"generation": gen, "type": stat}, value)
+
+        # process resource usage
+        for key, value in self.process.cpu_times()._asdict():
+            self.resources.set({"type": f"cpu_{key}"}, value)
+        for key, value in self.process.memory_info()._asdict():
+            self.resources.set({"type": f"mem_{key}"}, value)
+        for key, value in self.process.io_counters()._asdict():
+            self.resources.set({"type": f"io_{key}"}, value)
+        self.resources.set({"type": "num_threads"}, self.process.num_threads())
+        self.resources.set({"type": "num_fds"}, self.process.num_fds())
 
     @tasks.loop(count=1, reconnect=False)
     async def serve(self):
@@ -36,6 +86,8 @@ class Metrics(commands.Cog):
         await self.bot.wait_until_ready()
 
     def cog_unload(self):
+        self.unhook_gc()
+        self.update_gc_and_resource_stats.cancel()  # pylint: disable=no-member
         self.serve.cancel()  # pylint: disable=no-member
         self.update_latency.cancel()  # pylint: disable=no-member
 
