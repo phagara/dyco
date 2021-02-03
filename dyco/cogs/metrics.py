@@ -64,11 +64,11 @@ class Metrics(commands.Cog):
                 self.gc_stats.set({"generation": gen, "type": stat}, value)
 
         # process resource usage
-        for key, value in self.process.cpu_times()._asdict():
+        for key, value in self.process.cpu_times()._asdict().items():
             self.resources.set({"type": f"cpu_{key}"}, value)
-        for key, value in self.process.memory_info()._asdict():
+        for key, value in self.process.memory_info()._asdict().items():
             self.resources.set({"type": f"mem_{key}"}, value)
-        for key, value in self.process.io_counters()._asdict():
+        for key, value in self.process.io_counters()._asdict().items():
             self.resources.set({"type": f"io_{key}"}, value)
         self.resources.set({"type": "num_threads"}, self.process.num_threads())
         self.resources.set({"type": "num_fds"}, self.process.num_fds())
