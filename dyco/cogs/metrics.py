@@ -16,6 +16,7 @@ from discord.ext import tasks, commands
 class Metrics(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+
         self.registry = Registry()
         self.service = Service(self.registry)
 

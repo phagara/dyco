@@ -22,6 +22,8 @@ setuptools.setup(
         "aioprometheus",
         "jsonschema",
         "psutil",
+        "aiohttp",
+        "validators",
     ],
     python_requires=">=3.9",
     classifiers=[
