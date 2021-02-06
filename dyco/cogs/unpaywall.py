@@ -11,8 +11,7 @@ class Unpaywall(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.session = aiohttp.ClientSession(
-            timeout=aiohttp.ClientTimeout(total=5),
-            raise_for_status=True
+            timeout=aiohttp.ClientTimeout(total=5), raise_for_status=True
         )
 
     def cog_unload(self):
@@ -24,7 +23,9 @@ class Unpaywall(commands.Cog):
         Try to bypass the paywall of various news sites.
         """
         try:
-            async with self.session.head(f"https://{url}", allow_redirects=True) as resp:
+            async with self.session.head(
+                f"https://{url}", allow_redirects=True
+            ) as resp:
                 await ctx.reply(f"{resp.url}")
         except aiohttp.ClientError as exc:
             await ctx.reply(f"Unpaywalling failed: {exc}")
