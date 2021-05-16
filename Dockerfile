@@ -1,4 +1,4 @@
-FROM python:3.9-slim as builder
+FROM python:3.9-slim-buster
 
 ARG DYCO_VERSION
 ARG DYCO_UID
@@ -16,6 +16,8 @@ COPY LICENSE MANIFEST.in requirements.txt setup.py /app/
 
 RUN useradd -mU dyco
 RUN chown -R dyco:dyco /app
+# hadolint ignore=DL3008
+RUN apt-get install --no-install-recommends -y gcc
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
 USER dyco
