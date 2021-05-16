@@ -1,0 +1,85 @@
+name: publish-release-on-tag
+on: push
+jobs:
+  hadolint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 1
+      - run: docker run --rm -i hadolint/hadolint:latest-alpine < Dockerfile
+  pylint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - run: |
+          python3 -m pip install --upgrade pip
+          # need to install setuptools first, as wrapt's (pylint sub-dep) install scripts depends on it
+          python3 -m pip install -r .github/workflows/setuptools-requirements.txt
+          python3 -m pip install -r .github/workflows/pylint-requirements.txt
+          python3 -m pip install -r requirements.txt
+          python3 -m pylint --errors-only --disable=unsubscriptable-object dyco
+  black:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install -r .github/workflows/black-requirements.txt
+          python3 -m black --diff --check dyco
+  build-image:
+    needs: [hadolint, pylint, black]
+    runs-on: ubuntu-latest
+  tag-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 1
+      - name: set env variables
+        run: |
+          GIT_SHORT_SHA="${GITHUB_SHA:0:8}"
+          GIT_TAG=$(echo "${GITHUB_REF}" | sed -e 's,^refs/tags/,,')
+          [ "$(git tag | sort -V | tail -n1)" == "${GIT_TAG}" ] && echo "tag_latest=1" >> "${GITHUB_ENV}"
+          echo "src_tag=${GIT_SHORT_SHA}" >> "${GITHUB_ENV}"
+          echo "dst_tag=${GIT_TAG}" >> "${GITHUB_ENV}"
+      - name: container registry login
+        run: skopeo login --username=${{ secrets.QUAY_USERNAME }} --password-stdin quay.io <<< "${{ secrets.QUAY_PASSWORD }}"
+      - name: check existing source image
+        run: skopeo inspect "docker://${{ secrets.QUAY_IMAGE}}:${{ env.src_tag }}"
+      - name: check destination image tag does not exist yet
+        run: ! skopeo inspect "docker://${{ secrets.QUAY_IMAGE}}:${{ env.dst_tag }}"
+      - name: add release tag to existing image
+        run: skopeo copy --all "docker://${{ secrets.QUAY_IMAGE}}:${{ env.src_tag }}" "docker://${{ secrets.QUAY_IMAGE}}:${{ env.dst_tag }}"
+      - name: add latest tag to existing image
+        if: ${{ env.tag_latest == "1" }}
+        run: skopeo copy --all "docker://${{ secrets.QUAY_IMAGE}}:${{ env.dst_tag }}" "docker://${{ secrets.QUAY_IMAGE}}:latest"
+      - name: container registry logout
+        run: |
+          skopeo logout quay.io
+  push-image:
+    needs: tag-image
+    runs-on:  ubuntu-latest
+  release:
+    if:
+    needs: push-image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: false
+          prerelease: false
