@@ -24,7 +24,7 @@ class Unpaywall(commands.Cog):
         """
         try:
             async with self.session.head(
-                f"https://{url}", allow_redirects=True
+                f"https://outline.com/{url}", allow_redirects=True
             ) as resp:
                 await ctx.reply(f"{resp.url}")
         except aiohttp.ClientError as exc:
