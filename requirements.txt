@@ -3,7 +3,7 @@ PyYAML==5.4.1
 urlextract==1.2.0
 humanize==3.2.0
 transliterate==1.10.2
-websockets==8.1
+websockets==9.1
 tabulate==0.8.7
 aioprometheus==20.0.1
 jsonschema==3.2.0
